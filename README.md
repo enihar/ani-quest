@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AniQuest
 
-## Getting Started
+#### https://ani-quest-5o87.vercel.app
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tools and Libraries
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- NextJS 14, TypeScript, ChakraUI, Tailwind
+- Vercel for deployment and hosting
+- GitHub https://github.com/enihar/ani-quest
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## App Features
 
-## Learn More
+App can be visited here https://ani-quest-5o87.vercel.app
 
-To learn more about Next.js, take a look at the following resources:
+- Public pages are `/` and `/sign-in`
+- Private page `/information` to browse animes
+- Private pages are protected by authentication logic in `middleware.ts`
+- User info is stored in cookies and session is managed in Context
+  - For a small app like this one, Context may not be required but I wanted to make the app scalable for future use cases.
+  - Also using cookies to get user info everywhere is redundant
+- Pagination of the graphql anime data
+  - Every page can be directly linked & visited using query param `/information?page=3`
+  - When not logged in, it asks the user to sign in and redirects back to the intended page after signin
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## User Flow
 
-## Deploy on Vercel
+- User lands on `/` home page
+- Clicks on either `Embark on Your Journey` or `Sign In` on the nav bar
+- Goes to `Sign In` page and enters user information
+- Automatically gets redirected to `/information` page after signin. Then,
+  - User can click on an image to open anime detail in a modal
+  - User can go to next/previous page
+- User can click on the Avatar in nav bar to open the menu. From here user can -
+  - Edit user data through a modal
+  - Sign out
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Style / CSS
+
+- Tailwind and Chakra theme extended to add a few colors
+- Footer added just to complete the design
+- All the pages are responsive and tested on all devices
+- Skeletons displayed when loading animes on `/information` and also on the detail modal
+
+---
+
+## Accessibility
+
+- Semantic HTML elements `main, footer, nav` used to create regions for screen readers
+- Signin form has `aria-label` for username and JobTitle
+- User menu created with ChakraUI, so accessibility is already implemented
+- Anime detail modal also created with ChakraUI
+- Issues fixed after testing with **AXE** dev tool
+  - Color contrast for buttons
+  - Deleted an image initially created in the menu list, because it doesn't respect ARIA guidelines
+- Zero accessibility issues in the app :tada:
+
+---
+
+## Reason for a modal to update user info
+
+- Small form to collect minimal amount of information
+- User data can be updated from any page without losing context of the current page
+- Quick in-page experience
