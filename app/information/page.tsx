@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import client from '@/apollo-client';
 import {
@@ -9,7 +9,6 @@ import {
   Button,
   Grid,
   GridItem,
-  Heading,
   Image,
   Text,
   Modal,
@@ -20,59 +19,11 @@ import {
   useDisclosure,
   Skeleton,
   Divider,
-  AbsoluteCenter,
 } from '@chakra-ui/react';
 import AnimeDetail from '@/components/AnimeDetail';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-
-interface Anime {
-  id: number;
-  title: {
-    romaji: string;
-    english?: string;
-    native?: string;
-  };
-  coverImage: {
-    large: string;
-  };
-  genres: string[];
-  studios: {
-    nodes: Array<{
-      name: string;
-    }>;
-  };
-  nextAiringEpisode?: {
-    airingAt: number;
-    timeUntilAiring: number;
-    episode: number;
-  };
-}
-
-const GET_ALL_ANIME = gql`
-  query GetAnimeList($page: Int, $perPage: Int) {
-    Page(page: $page, perPage: $perPage) {
-      pageInfo {
-        total
-        currentPage
-        lastPage
-        hasNextPage
-      }
-      media(type: ANIME) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        coverImage {
-          large
-        }
-        genres
-        averageScore
-      }
-    }
-  }
-`;
+import { GetAnimeListResponse, AnimeMedia } from '@/types/anime';
+import { GET_ALL_ANIME } from '@/graphql/getAllAnimes';
 
 const AnimePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,8 +34,7 @@ const AnimePage = () => {
   const initialPage = parseInt(searchParams.get('page') || '1', 10);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null);
-  console.log(selectedAnime);
+  const [selectedAnime, setSelectedAnime] = useState<AnimeMedia | null>(null);
   const perPage = 10;
 
   useEffect(() => {
@@ -103,10 +53,13 @@ const AnimePage = () => {
     router.push(`?page=${newPage}`);
   };
 
-  const { loading, error, data } = useQuery(GET_ALL_ANIME, {
-    variables: { page: currentPage, perPage },
-    client,
-  });
+  const { loading, error, data } = useQuery<GetAnimeListResponse>(
+    GET_ALL_ANIME,
+    {
+      variables: { page: currentPage, perPage },
+      client,
+    }
+  );
 
   if (loading) {
     return (
@@ -132,20 +85,20 @@ const AnimePage = () => {
     return <Text>Error: {error.message}</Text>;
   }
 
+  if (!data) {
+    return <p>No animes found</p>;
+  }
+
   const { pageInfo, media: series } = data.Page;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      {/* <Heading as="h1" mb={4}>
-        Browse your favourite Anime
-      </Heading> */}
-
       <Grid
         mt={17}
         templateColumns="repeat(auto-fit, minmax(180px, 1fr))"
         gap={14}
       >
-        {series.map((anime: Anime) => (
+        {series.map((anime: AnimeMedia) => (
           <button
             key={anime.id}
             onClick={() => {
@@ -180,8 +133,7 @@ const AnimePage = () => {
         ))}
       </Grid>
 
-      <Divider style={{ borderColor: 'red' }} mt='5' />
-        
+      <Divider style={{ borderColor: 'red' }} mt="5" />
 
       {/* Pagination */}
       <Box

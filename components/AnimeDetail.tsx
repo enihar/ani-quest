@@ -12,9 +12,11 @@ import {
   SkeletonText,
   useToast,
 } from '@chakra-ui/react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import client from '@/apollo-client';
 import DOMPurify from 'dompurify';
+import { GetAnimeDetailsResponse } from '@/types/anime';
+import { GET_ANIME_DETAILS } from '@/graphql/getAnimeDetail';
 
 function AnimeDetailsSkeleton() {
   return (
@@ -48,42 +50,6 @@ function AnimeDetailsSkeleton() {
   );
 }
 
-const GET_ANIME_DETAILS = gql`
-  query GetAnimeDetails($id: Int) {
-    Media(id: $id, type: ANIME) {
-      title {
-        romaji
-        english
-        native
-      }
-      coverImage {
-        medium
-      }
-      description
-      genres
-      averageScore
-      episodes
-      duration
-      status
-      startDate {
-        year
-        month
-        day
-      }
-      endDate {
-        year
-        month
-        day
-      }
-      studios(isMain: true) {
-        nodes {
-          name
-        }
-      }
-    }
-  }
-`;
-
 function AnimeDetails({
   animeId,
   onClose,
@@ -94,20 +60,21 @@ function AnimeDetails({
   const [isExpanded, setIsExpanded] = useState(false);
   const toast = useToast();
 
-  const { loading, error, data } = useQuery(GET_ANIME_DETAILS, {
-    variables: { id: animeId },
-    skip: !animeId, // Skip the query if `animeId` is not available
-    client,
-  });
+  const { loading, error, data } = useQuery<GetAnimeDetailsResponse>(
+    GET_ANIME_DETAILS,
+    {
+      variables: { id: animeId },
+      skip: !animeId, // Skip the query if `animeId` is not available
+      client,
+    }
+  );
 
   // Show error toast
   useEffect(() => {
     if (error) {
       toast({
         title: 'Error occurred',
-        // description: error.message,
         description: 'There was an error loading the details.',
-
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -126,6 +93,10 @@ function AnimeDetails({
         <AnimeDetailsSkeleton></AnimeDetailsSkeleton>
       </Box>
     );
+  }
+
+  if (!data || !data.Media) {
+    return <p>No anime found</p>;
   }
 
   if (error) {

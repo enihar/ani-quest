@@ -18,7 +18,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: 'AniQuest',
-  description: 'Find all your favourite anime characters',
+  description: 'Find all your favourite anime series and characters',
 };
 
 export default function RootLayout({
