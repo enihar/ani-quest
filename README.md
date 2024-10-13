@@ -3,6 +3,12 @@
 #### https://ani-quest-5o87.vercel.app
 
 ---
+<img width="325" alt="Screenshot 2024-10-13 at 5 37 01 pm" src="https://github.com/user-attachments/assets/7f40ff93-5f61-4b80-a738-ae5b78f4f5c0">
+
+<img width="327" alt="Screenshot 2024-10-13 at 5 36 26 pm" src="https://github.com/user-attachments/assets/f0dcb13c-03e7-419a-a430-d4577cde618b">
+
+<img width="325" alt="Screenshot 2024-10-13 at 5 36 44 pm" src="https://github.com/user-attachments/assets/0110acdb-b104-4a18-8361-57189cdf4ba6">
+
 
 ## Tools and Libraries
 
