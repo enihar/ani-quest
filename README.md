@@ -12,12 +12,16 @@
 ---
 
 <img width="1907" alt="Screenshot 2024-10-13 at 5 29 11 pm" src="https://github.com/user-attachments/assets/e4014a0b-1fff-469d-bf16-523c503616b7">
+---
 
 <img width="1623" alt="Screenshot 2024-10-13 at 5 35 01 pm" src="https://github.com/user-attachments/assets/5efa6158-d38a-4c23-9310-d4fcad6d1b2a">
+---
 
 <img width="1245" alt="Screenshot 2024-10-13 at 5 35 21 pm" src="https://github.com/user-attachments/assets/ff53e785-8c0c-42b7-a546-01583e4a0fcd">
+---
 
 <img width="762" alt="Screenshot 2024-10-13 at 5 35 35 pm" src="https://github.com/user-attachments/assets/cd70e5b0-84e2-4540-8970-664ae7ab422a">
+---
 
 ## Tools and Libraries
 
